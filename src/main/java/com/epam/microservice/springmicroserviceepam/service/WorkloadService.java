@@ -1,10 +1,12 @@
 package com.epam.microservice.springmicroserviceepam.service;
 
+import com.epam.microservice.springmicroserviceepam.dto.TrainerSummaryDto;
 import com.epam.microservice.springmicroserviceepam.dto.WorkloadRequest;
 import com.epam.microservice.springmicroserviceepam.model.MonthSummary;
 import com.epam.microservice.springmicroserviceepam.model.TrainerSummary;
 import com.epam.microservice.springmicroserviceepam.model.YearSummary;
 import com.epam.microservice.springmicroserviceepam.repository.TrainerSummaryRepository;
+import com.epam.microservice.springmicroserviceepam.util.TrainerSummaryMapper;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +67,9 @@ public class WorkloadService {
                 request.getTrainerUsername(), yearSummary.getYear(), monthSummary.getMonth(), monthSummary.getTrainingSummaryDuration());
     }
 
-    public TrainerSummary getWorkload(String username) {
-        return trainerSummaryRepository.findByUsername(username).orElse(null);
+    public TrainerSummaryDto getWorkload(String username) {
+        return trainerSummaryRepository.findByUsername(username)
+                .map(TrainerSummaryMapper::toDto)
+                .orElse(null);
     }
 }

@@ -1,6 +1,6 @@
 package com.epam.microservice.springmicroserviceepam.model;
 
-import com.epam.microservice.springmicroserviceepam.model.YearSummary;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +20,6 @@ public class MonthSummary {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "year_summary_id")
+    @JsonIgnore
     private YearSummary yearSummary;
 }

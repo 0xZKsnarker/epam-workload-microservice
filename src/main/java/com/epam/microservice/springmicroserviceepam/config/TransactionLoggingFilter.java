@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -21,13 +22,22 @@ import java.util.UUID;
 public class TransactionLoggingFilter implements Filter {
 
     private static final String TRANSACTION_ID_KEY = "transactionId";
+    private static final String TRANSACTION_ID_HEADER = "X-Transaction-ID";
     private static final Logger log = LoggerFactory.getLogger(TransactionLoggingFilter.class);
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
         try {
-            String transactionId = UUID.randomUUID().toString();
+            String transactionId = null;
+            if (request instanceof HttpServletRequest httpRequest) {
+                transactionId = httpRequest.getHeader(TRANSACTION_ID_HEADER);
+            }
+
+            if (!StringUtils.hasText(transactionId)) {
+                transactionId = UUID.randomUUID().toString();
+            }
+
             MDC.put(TRANSACTION_ID_KEY, transactionId);
 
             if (request instanceof HttpServletRequest httpRequest) {

@@ -1,7 +1,7 @@
 package com.epam.microservice.springmicroserviceepam.controller;
 
+import com.epam.microservice.springmicroserviceepam.dto.TrainerSummaryDto;
 import com.epam.microservice.springmicroserviceepam.dto.WorkloadRequest;
-import com.epam.microservice.springmicroserviceepam.model.TrainerSummary;
 import com.epam.microservice.springmicroserviceepam.service.WorkloadService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +23,11 @@ public class WorkloadController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<TrainerSummary> getTrainerWorkload(@PathVariable String username) {
-        TrainerSummary summary = workloadService.getWorkload(username);
-        if (summary == null) {
+    public ResponseEntity<TrainerSummaryDto> getTrainerWorkload(@PathVariable String username) {
+        TrainerSummaryDto summaryDto = workloadService.getWorkload(username);
+        if (summaryDto == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(summary);
+        return ResponseEntity.ok(summaryDto);
     }
 }
